@@ -8,13 +8,15 @@ import UIKit
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]?
     ) -> Bool {
         GeneratedPluginRegistrant.register(with: self)
-
-        weak var registrar = self.registrar(forPlugin: "plugin-name")
-
-        let factory = FLNativeViewFactory(messenger: registrar!.messenger())
-        self.registrar(forPlugin: "<plugin-name>")!.register(
+        
+        weak var registrar = self.registrar(forPlugin: "dailymotion-player-plugin")
+        
+        let factory = DailymotionPlayerViewFactory(messenger: registrar!.messenger())
+        self.registrar(forPlugin: "<dailymotion-player-plugin>")!.register(
             factory,
-            withId: "<platform-view-type>")
+            withId: "dailymotion-player-view"
+        )
+        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }

@@ -16,16 +16,14 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     var videoId: String = ""
     var playerView: DMPlayerView?
     var parameters: DMPlayerParameters?
-    
-    //    var playerContainerView: UIView!
-    
+    var frame: CGRect
     
     // Initialize the class with playerId and videoId
-    init(playerId: String?, videoId: String, parameters: DMPlayerParameters? = nil) {
+    init(frame: CGRect, playerId: String?, videoId: String, parameters: DMPlayerParameters? = nil) {
         self.playerId = playerId
         self.videoId = videoId
         self.parameters = parameters ?? DMPlayerParameters(mute: false, defaultFullscreenOrientation: .portrait)
-        
+        self.frame = frame
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -37,7 +35,6 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        playerContainerView = view
         Task {
             await initPlayer()
         }
@@ -58,10 +55,9 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
         self.playerView = playerView
         self.view.addSubview(playerView)
         
-        // Add the DMPlayerView as a subview to player container
-        self.playerView = playerView
-        self.view.addSubview(playerView)
+        playerView.frame = CGRect(origin: CGPoint.zero, size: self.view.bounds.size)
         playerView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             playerView.topAnchor.constraint(equalTo: view.topAnchor),
             playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -69,19 +65,10 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
             playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        //        self.playerView?.setFullscreen(fullscreen: true)
-        //        playerView.pause()
         print("Player view added", self.playerView!)
         
         
     }
-    
-    //    // DMPlayerDelegate methods
-    //    func player(_ player: DMPlayerView, openUrl url: URL) {
-    //        // Assign playerView to the instance
-    //        print("Player DELEGATE")
-    //        // Handle open URL event
-    //    }
     
     func play() {
         self.playerView?.play()
@@ -90,7 +77,8 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     func pause() {
         self.playerView?.pause()
     }
-    func loadVideo(videoId: String) {
+    
+    func load(videoId: String) {
         self.playerView?.loadContent(videoId: videoId)
     }
     
@@ -137,15 +125,14 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
 
 extension DailymotionPlayerController: DMPlayerDelegate {
     func playerWillPresentFullscreenViewController(_ player: DMPlayerView) -> UIViewController? {
-        return self.parent.self
+        return self
     }
     
     func playerWillPresentAdInParentViewController(_ player: DMPlayerView) -> UIViewController {
         return self
     }
 
-    
     func player(_ player: DMPlayerView, openUrl url: URL) {
-        UIApplication.shared.open(url)
+        
     }
 }
