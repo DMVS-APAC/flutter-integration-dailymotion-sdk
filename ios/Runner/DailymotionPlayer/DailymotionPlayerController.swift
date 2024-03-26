@@ -10,13 +10,15 @@ import UIKit
 import DailymotionPlayerSDK
 import SwiftUI
 
-class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDelegate{
+class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDelegate, DMAdDelegate{
     
     var playerId: String?
     var videoId: String = ""
     var playerView: DMPlayerView?
     var parameters: DMPlayerParameters?
     var frame: CGRect
+    private var initialFrame: CGRect?
+    
     
     // Initialize the class with playerId and videoId
     init(frame: CGRect, playerId: String?, videoId: String, parameters: DMPlayerParameters? = nil) {
@@ -35,6 +37,7 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initialFrame = self.view.frame
         Task {
             await initPlayer()
         }
@@ -43,7 +46,7 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     
     func initPlayer(with parameters: DMPlayerParameters? = nil) async {
         do {
-            let playerView = try await Dailymotion.createPlayer(playerId: playerId ?? "xix5x", videoId: videoId, playerParameters: (parameters ?? self.parameters)!, playerDelegate: self, videoDelegate: self, logLevels: [.all])
+            let playerView = try await Dailymotion.createPlayer(playerId: playerId ?? "xix5x", videoId: videoId, playerParameters: (parameters ?? self.parameters)!, playerDelegate: self, videoDelegate: self, adDelegate: self, logLevels: [.all])
             addPlayerView(playerView: playerView)
         } catch {
             handlePlayerError(error: error)
@@ -58,12 +61,15 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
         playerView.frame = CGRect(origin: CGPoint.zero, size: self.view.bounds.size)
         playerView.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
+        
+        let constraints = [
             playerView.topAnchor.constraint(equalTo: view.topAnchor),
             playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        ]
+        
+        NSLayoutConstraint.activate(constraints)
         
         print("Player view added", self.playerView!)
         
@@ -124,6 +130,22 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
 
 
 extension DailymotionPlayerController: DMPlayerDelegate {
+    func player(_ player: DailymotionPlayerSDK.DMPlayerView, openUrl url: URL) {
+        
+    }
+    
+    func playerDidRequestFullscreen(_ player: DMPlayerView) {
+        // Move the player in fullscreen State
+        // Call notifyFullscreenChanged() the player will update his state
+        player.notifyFullscreenChanged()
+    }
+    
+    func playerDidExitFullScreen(_ player: DMPlayerView) {
+        // Move the player in initial State
+        // Call notifyFullscreenChanged() the player will update his state
+        player.notifyFullscreenChanged()
+    }
+    
     func playerWillPresentFullscreenViewController(_ player: DMPlayerView) -> UIViewController? {
         return self
     }
@@ -131,8 +153,40 @@ extension DailymotionPlayerController: DMPlayerDelegate {
     func playerWillPresentAdInParentViewController(_ player: DMPlayerView) -> UIViewController {
         return self
     }
-
-    func player(_ player: DMPlayerView, openUrl url: URL) {
+    
+    func player(_ player: DMPlayerView, didChangeVideo changedVideoEvent: PlayerVideoChangeEvent) {
+        print( "--playerDidChangeVideo")
+    }
+    
+    func player(_ player: DMPlayerView, didChangeVolume volume: Double, _ muted: Bool) {
+        print( "--playerDidChangeVolume")
+    }
+    
+    func playerDidCriticalPathReady(_ player: DMPlayerView) {
+        print( "--playerDidCriticalPathReady")
+    }
+    
+    func player(_ player: DMPlayerView, didReceivePlaybackPermission playbackPermission: PlayerPlaybackPermission) {
+        print( "--playerDidReceivePlaybackPermission")
+    }
+    
+    func player(_ player: DMPlayerView, didChangePresentationMode presentationMode: DMPlayerView.PresentationMode) {
         
+        
+        if (!player.isFullscreen) {
+            print( "--playerDidChangePresentationMode", player.isFullscreen)
+            self.view.backgroundColor = UIColor.yellow
+
+            if let initialFrame = initialFrame {
+                player.frame = initialFrame
+                player.layoutIfNeeded()
+                self.view.frame = initialFrame
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    func player(_ player: DMPlayerView, didChangeScaleMode scaleMode: String) {
+        print( "--playerDidChangeScaleMode")
     }
 }

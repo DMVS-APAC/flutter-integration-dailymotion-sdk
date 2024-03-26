@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 class DailymotionPlayerController {
   final String videoId;
   final String playerId;
+  bool isFullScreen = false;
 
   final MethodChannel _methodChannel =
       const MethodChannel('dailymotion-player-channel');
@@ -17,6 +18,10 @@ class DailymotionPlayerController {
     } on PlatformException catch (e) {
       print("Failed to play video: '${e.message}'.");
     }
+  }
+
+  Future<void> setFullScreen(bool value) async {
+    isFullScreen = value;
   }
 
   Future<void> pause() async {
