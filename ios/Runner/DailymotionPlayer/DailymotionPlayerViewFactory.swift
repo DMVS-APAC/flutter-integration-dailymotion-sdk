@@ -79,7 +79,7 @@ class DailymotionPlayerNativeView: NSObject, FlutterPlatformView{
         
         
         // Create an instance of DailymotionPlayerController
-        self.dailymotionPlayerController = DailymotionPlayerController(frame: frame, playerId: _playerId, videoId: _videoId, parameters: defaultParameters)
+        self.dailymotionPlayerController = DailymotionPlayerController(parent: _view, playerId: _playerId, videoId: _videoId, parameters: defaultParameters)
         
         
         super.init()
@@ -92,21 +92,17 @@ class DailymotionPlayerNativeView: NSObject, FlutterPlatformView{
     }
     
     func view() -> UIView {
-        return dailymotionPlayerController.view
-        
-        
-        
-        // Add the Dailymotion player's view as a subview to the provided _view
-        //        if let playerView = dailymotionPlayerController.view {
-        //            playerView.frame = _view.bounds
-        //            playerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        //            _view.addSubview(playerView)
-        //            return _view
-        //
-        //        } else {
-        //            print("Error: Dailymotion player's view is nil")
-        //        }
-        //        return _view
+        //         Add the Dailymotion player's view as a subview to the provided _view
+        if let playerView = dailymotionPlayerController.view {
+            playerView.frame = _view.bounds
+            playerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            _view.addSubview(playerView)
+            return _view
+            
+        } else {
+            print("Error: Dailymotion player's view is nil")
+        }
+        return _view
     }
     
     func play() {
@@ -120,25 +116,4 @@ class DailymotionPlayerNativeView: NSObject, FlutterPlatformView{
     func load(videoId:String) {
         dailymotionPlayerController.load(videoId: videoId)
     }
-    
-    
-    //    func view() -> UIView {
-    //          if let playerView = dailymotionPlayerController.view {
-    //              playerView.frame = _view.bounds
-    //              playerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    //              _view.addSubview(playerView)
-    //              return _view
-    //          } else {
-    //              print("Error: Dailymotion player's view is nil")
-    //              return UIView()
-    //          }
-    //      }
-    
-    //    func createNativeView(view _view: UIView){
-    //
-    //        // default parameter of dailymotion player
-    //
-    
-    //
-    //    }
 }

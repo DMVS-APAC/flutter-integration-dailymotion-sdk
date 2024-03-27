@@ -14,18 +14,20 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     
     var playerId: String?
     var videoId: String = ""
+   
+    var _parent: UIView
     var playerView: DMPlayerView?
     var parameters: DMPlayerParameters?
-    var frame: CGRect
-    private var initialFrame: CGRect?
+    
+    private var playerWrapper: UIView?
     
     
     // Initialize the class with playerId and videoId
-    init(frame: CGRect, playerId: String?, videoId: String, parameters: DMPlayerParameters? = nil) {
+    init(parent: UIView, playerId: String?, videoId: String, parameters: DMPlayerParameters? = nil) {
+        self._parent = parent
         self.playerId = playerId
         self.videoId = videoId
         self.parameters = parameters ?? DMPlayerParameters(mute: false, defaultFullscreenOrientation: .portrait)
-        self.frame = frame
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -37,7 +39,7 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialFrame = self.view.frame
+        self.playerWrapper = UIView()
         Task {
             await initPlayer()
         }
@@ -56,17 +58,28 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     
     private func addPlayerView(playerView: DMPlayerView) {
         self.playerView = playerView
-        self.view.addSubview(playerView)
         
-        playerView.frame = CGRect(origin: CGPoint.zero, size: self.view.bounds.size)
-        playerView.translatesAutoresizingMaskIntoConstraints = false
+        /**
+         Add playerView into player wrapper
+         */
+        self.playerWrapper!.addSubview(playerView)
+        
+        /**
+         Adjust the wraper frame to follow parent frame
+         */
+        self.playerWrapper?.frame = self._parent.frame
+        
+        /**
+         Add player wrapper as a subview of a parent
+         */
+        self._parent.addSubview(self.playerWrapper!)
         
         
         let constraints = [
-            playerView.topAnchor.constraint(equalTo: view.topAnchor),
-            playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            playerView.topAnchor.constraint(equalTo: playerWrapper?.topAnchor ?? self._parent.topAnchor),
+            playerView.bottomAnchor.constraint(equalTo: playerWrapper?.bottomAnchor ?? self._parent.bottomAnchor),
+            playerView.leadingAnchor.constraint(equalTo: playerWrapper?.leadingAnchor ?? self._parent.leadingAnchor),
+            playerView.trailingAnchor.constraint(equalTo: playerWrapper?.trailingAnchor ?? self._parent.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -171,19 +184,7 @@ extension DailymotionPlayerController: DMPlayerDelegate {
     }
     
     func player(_ player: DMPlayerView, didChangePresentationMode presentationMode: DMPlayerView.PresentationMode) {
-        
-        
-        if (!player.isFullscreen) {
-            print( "--playerDidChangePresentationMode", player.isFullscreen)
-            self.view.backgroundColor = UIColor.yellow
-
-            if let initialFrame = initialFrame {
-                player.frame = initialFrame
-                player.layoutIfNeeded()
-                self.view.frame = initialFrame
-                self.view.layoutIfNeeded()
-            }
-        }
+        print( "--playerDidChangePresentationMode", player.isFullscreen)
     }
     
     func player(_ player: DMPlayerView, didChangeScaleMode scaleMode: String) {
