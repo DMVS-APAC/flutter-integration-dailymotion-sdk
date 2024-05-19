@@ -2,6 +2,10 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            name = "DailymotionMavenRelease"
+            url = "https://mvn.dailymotion.com/repository/releases/"
+        }
     }
 }
 
