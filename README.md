@@ -2,6 +2,27 @@
 
 This documentation provides guidelines for integrating the Dailymotion iOS SDK & Dailymotion Android SDK into a Flutter application. By following these steps, you will be able to create a Dailymotion player in your Flutter app and control it using Flutter code.
 
+- [Flutter - Dailymotion SDK Integration](#flutter---dailymotion-sdk-integration)
+- [**Requirements:**](#--requirements---)
+- [**iOS Integration Steps:**](#--ios-integration-steps---)
+  - [**Step 1: Create DailymotionPlayer Folder:**](#--step-1--create-dailymotionplayer-folder---)
+  - [**Step 2: Create DailymotionPlayerController.dart:**](#--step-2--create-dailymotionplayercontrollerdart---)
+  - [**Step 3: Create DailymotionPlayerWidget.dart:**](#--step-3--create-dailymotionplayerwidgetdart---)
+  - [**Step 4. Create Files Inside iOS Project**](#--step-4-create-files-inside-ios-project--)
+  - [**Step 5: Modify AppDelegate.swift**](#--step-5--modify-appdelegateswift--)
+- [**Android Integration Steps:**](#--android-integration-steps---)
+  - [**Preparation**](#--preparation--)
+    - [Step 1: Upgrade Kotlin Version](#step-1--upgrade-kotlin-version)
+    - [Step 2: Add Maven Repository](#step-2--add-maven-repository)
+    - [Step 3: Add Required Dependencies](#step-3--add-required-dependencies)
+  - [**Step 1: Create DailymotionPlayer Folder:**](#--step-1--create-dailymotionplayer-folder----1)
+  - [**Step 1: Modify MainActivity.kt**](#--step-1--modify-mainactivitykt--)
+  - [**Step 2: Register DailymotionPlayer plugin inside MainActivity**](#--step-2--register-dailymotionplayer-plugin-inside-mainactivity--)
+  - [**Step 3: Create DailymotionPlayerViewFactory**](#--step-3--create-dailymotionplayerviewfactory--)
+  - [**Step 4: Create DailymotionPlayerNativeView**](#--step-4--create-dailymotionplayernativeview--)
+  - [**Step 5: Create DailymotionPlayerController**](#--step-5--create-dailymotionplayercontroller--)
+- [**Usage:**](#--usage---)
+
 # **Requirements:**
 
 - Flutter SDK is installed on your development machine.
@@ -667,6 +688,3 @@ class PauseButton extends StatelessWidget {
 }
 
 ```
-
-minSdkVersion 21
-id "org.jetbrains.kotlin.android" version "1.9.10" apply false\
