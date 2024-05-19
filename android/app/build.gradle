@@ -45,7 +45,7 @@ android {
         applicationId "com.example.flutterdailymotion"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -64,4 +64,9 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation 'com.dailymotion.player.android:sdk:1.2.0'
+    implementation 'com.dailymotion.player.android:ads:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.fragment:fragment-ktx:1.7.0'
+}
