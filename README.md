@@ -28,8 +28,8 @@ This documentation provides guidelines for integrating the Dailymotion iOS SDK &
 - Flutter SDK is installed on your development machine.
 - Xcode installed for iOS development.
 - Android Studio for Android development.
-- Dailymotion iOS SDK.
-- Dailymotion Android SDK.
+- [Dailymotion iOS SDK](https://github.com/dailymotion/player-sdk-ios).
+- [Dailymotion Android SDK](https://mvn.dailymotion.com/#browse/browse:releases).
 - Basic knowledge of Flutter, Android and iOS development.
 
 # **iOS Integration Steps:**
