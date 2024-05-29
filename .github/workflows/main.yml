@@ -1,0 +1,16 @@
+# .github/workflows/build-docker-image.yml
+name: upload-to-release
+
+on: release
+
+jobs:
+  upload-to-release:
+    name: Build and upload docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: release/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
