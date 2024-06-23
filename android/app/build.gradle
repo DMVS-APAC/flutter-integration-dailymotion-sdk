@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.flutterdailymotion"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -65,8 +65,8 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.dailymotion.player.android:sdk:1.2.0'
-    implementation 'com.dailymotion.player.android:ads:1.2.0'
+    implementation 'com.dailymotion.player.android:sdk:1.2.1'
+    implementation 'com.dailymotion.player.android:ads:1.2.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.fragment:fragment-ktx:1.7.0'
 }
