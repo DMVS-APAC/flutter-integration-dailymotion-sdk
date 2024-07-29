@@ -451,6 +451,7 @@ import com.dailymotion.android.player.sdk.PlayerError
 import com.dailymotion.android.player.sdk.PlayerListener
 import com.dailymotion.android.player.sdk.PlayerView
 import com.dailymotion.android.player.sdk.Dailymotion
+import com.dailymotion.player.android.sdk.PlayerParameters
 
 ```
 
@@ -494,12 +495,19 @@ init {
 5. Create Dailymotion Player at initialization step
 
 ```kt
+
+// Create an instance of PlayerParameters with your desired settings
+val playerParameters = PlayerParameters(
+    mute = true,
+)
+
 init{
   ...
   Dailymotion.createPlayer(
             context = context,
             playerId = playerId,
             videoId = videoId,
+            playerParameters = playerParameters,
             playerSetupListener = object : Dailymotion.PlayerSetupListener {
                 override fun onPlayerSetupSuccess(player: PlayerView) {
                     playerView = player

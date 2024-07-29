@@ -6,6 +6,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.dailymotion.player.android.sdk.Dailymotion
+import com.dailymotion.player.android.sdk.PlayerParameters
 import com.dailymotion.player.android.sdk.PlayerView
 import com.dailymotion.player.android.sdk.listeners.PlayerListener
 import com.dailymotion.player.android.sdk.webview.error.PlayerError
@@ -21,6 +22,12 @@ class DailymotionPlayerController(context: Context, creationParams: Map<*, *>?, 
      */
     val logTag = "Dailymotion-Flutter-${Dailymotion.version()}"
 
+    // Create an instance of PlayerParameters with your desired settings
+    val playerParameters = PlayerParameters(
+        mute = true,
+    )
+
+
     init {
         // Safely cast and extract parameters
         videoId = creationParams?.get("videoId") as? String ?: ""
@@ -30,6 +37,7 @@ class DailymotionPlayerController(context: Context, creationParams: Map<*, *>?, 
             context= context,
             playerId = playerId,
             videoId = videoId,
+            playerParameters = playerParameters,
             playerSetupListener = object : Dailymotion.PlayerSetupListener {
                 override fun onPlayerSetupSuccess(player: PlayerView) {
                     playerView = player
