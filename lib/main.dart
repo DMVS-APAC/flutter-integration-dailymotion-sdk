@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterdailymotion/DailymotionPlayer/DailymotionPlayerController.dart';
 import 'package:flutterdailymotion/DailymotionPlayer/DailymotionPlayerWidget.dart';
@@ -67,6 +69,18 @@ class _MyHomePageState extends State<MyHomePage> {
                  * pass controller to DailymotionPlayerWidget
                  */
                 DailymotionPlayerWidget(controller: dmController),
+                SizedBox(
+                  height: 40,
+                  width: 100,
+                  child: UiKitView(
+                    viewType:
+                        'dailymotion-cast-button', // Matches the view type registered on iOS
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                      Factory<OneSequenceGestureRecognizer>(
+                          () => EagerGestureRecognizer()),
+                    },
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

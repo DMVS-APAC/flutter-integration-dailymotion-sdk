@@ -16,6 +16,12 @@ import UIKit
             factory,
             withId: "dailymotion-player-view"
         )
+
+        let castButtonFactory = CastButtonViewFactory(messenger: registrar!.messenger())
+        self.registrar(forPlugin: "<dailymotion-cast-button>")!.register(
+            castButtonFactory,
+            withId: "dailymotion-cast-button"
+        )
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }

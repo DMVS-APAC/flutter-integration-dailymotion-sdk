@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import DailymotionPlayerSDK
 import SwiftUI
+import GoogleCast
 
 class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDelegate, DMAdDelegate{
     
@@ -49,6 +50,10 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     func initPlayer(with parameters: DMPlayerParameters? = nil) async {
         do {
             let playerView = try await Dailymotion.createPlayer(playerId: playerId ?? "xix5x", videoId: videoId, playerParameters: (parameters ?? self.parameters)!, playerDelegate: self, videoDelegate: self, adDelegate: self, logLevels: [.all])
+            
+            Dailymotion.setupDailymotionChromecast()
+            GCKCastContext.sharedInstance().useDefaultExpandedMediaControls = true
+
             addPlayerView(playerView: playerView)
         } catch {
             handlePlayerError(error: error)
@@ -100,7 +105,6 @@ class DailymotionPlayerController: UIViewController, ObservableObject, DMVideoDe
     func load(videoId: String) {
         self.playerView?.loadContent(videoId: videoId)
     }
-    
     
     func handlePlayerError(error: Error) {
         switch(error) {
