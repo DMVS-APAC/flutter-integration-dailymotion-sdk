@@ -47,8 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
     /**
      * Pass videoId and playerId to DailymotionPlayerController
      */
-    dmController =
-        DailymotionPlayerController(videoId: "x8q4e1z", playerId: "xqzrc");
+    dmController = DailymotionPlayerController(
+        videoId: "ks0nn4rQp8Tt2pBw2eu", playerId: "xqzrc");
   }
 
   @override
